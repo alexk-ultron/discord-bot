@@ -1,0 +1,20 @@
+[project]
+name = "discord-bot"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Your Name",email = "you@example.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11,<4.0"
+dependencies = [
+    "python-dotenv (>=1.0.1,<2.0.0)",
+    "discum @ git+ssh://git@github.com/Merubokkusu/Discord-S.C.U.M.git",
+    "loguru (>=0.7.3,<0.8.0)",
+    "black (>=24.10.0,<25.0.0)",
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
