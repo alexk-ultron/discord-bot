@@ -7,7 +7,8 @@ import discum
 from loguru import logger
 
 import settings
-from utils import log_message, get_messages_from_date
+from db.redis import redis
+from utils import log_message, get_messages
 
 bot = discum.Client(email=settings.email, password=settings.password, log=False)
 
@@ -16,11 +17,8 @@ bot = discum.Client(email=settings.email, password=settings.password, log=False)
 def on_ready(resp):
     if resp.event.ready_supplemental:
         user = bot.gateway.session.user  # parsing the current user
-        from_date = settings.date_time_now - datetime.timedelta(
-            hours=settings.messages_timeframe
-        )
         logger.info(f'Logged in as {user.get("username")}')
-        logger.info(f"Start parsing messages from {from_date}")
+        logger.info(f"Start parsing messages from {settings.date_from}")
 
         random.shuffle(settings.channels)
 
@@ -34,9 +32,7 @@ def on_ready(resp):
 
             channel_data = channel.json()
 
-            messages_data = get_messages_from_date(
-                bot=bot, channel_id=channel_id, from_date=from_date
-            )
+            messages_data = get_messages(bot=bot, channel_id=channel_id)
 
             if messages_data:
                 for msg in messages_data:
@@ -49,4 +45,6 @@ def on_ready(resp):
         bot.gateway.close()
 
 
+redis.init()
 bot.gateway.run(auto_reconnect=True)
+redis.close()

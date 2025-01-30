@@ -1,0 +1,17 @@
+version: '3.9'
+name: discord-bot
+
+services:
+
+  bot:
+    build: .
+    volumes:
+      - .:/app
+
+  redis:
+    image: redis:alpine
+    restart: on-failure
+    volumes:
+      - ./data/redis:/data
+    ports:
+      - "6379:6379"
